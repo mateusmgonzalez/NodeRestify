@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
 const environment_1 = require("../common/environment");
 class Server {
-    initRoutes() {
+    initRoutes(routers) {
         return new Promise((resolve, reject) => {
             try {
                 this.application = restify.createServer({
@@ -11,24 +11,10 @@ class Server {
                     version: '1.0.0'
                 });
                 this.application.use(restify.plugins.queryParser());
-                this.application.get('/info', [(req, res, next) => {
-                        if (req.userAgent && req.userAgent().includes('MSIE 7.0')) {
-                            let error = new Error();
-                            error.statusCode = 400;
-                            error.message = "Please, update your browser";
-                            return next(error);
-                        }
-                        return next();
-                    }, (req, resp, next) => {
-                        resp.json({
-                            broser: req.userAgent(),
-                            method: req.method,
-                            url: req.href(),
-                            path: req.path(),
-                            query: req.query
-                        });
-                        return next();
-                    }]);
+                //routes
+                for (let router of routers) {
+                    router.applyRoutes(this.application);
+                }
                 this.application.listen(environment_1.environment.server.port, () => {
                     resolve(this.application);
                 });
@@ -38,8 +24,8 @@ class Server {
             }
         });
     }
-    bootstrap() {
-        return this.initRoutes().then(() => this);
+    bootstrap(routers) {
+        return this.initRoutes(routers).then(() => this);
     }
 }
 exports.Server = Server;
