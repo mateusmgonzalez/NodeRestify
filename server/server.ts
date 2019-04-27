@@ -6,7 +6,7 @@ export class Server {
 
     application: restify.Server
 
-    initializeDb(): mongoose.MongooseThenable{
+    initializeDb(): mongoose.MongooseThenable {
         (<any>) mongoose.Promise = global.Promise
         return mongoose.connect(environment.db.url,{
             useMongoClient: true
@@ -40,6 +40,7 @@ export class Server {
 
 
     bootstrap(routers: Router[]) : Promise<Server>{
-        return this.initializeDb().then(() => this.initRoutes(routers).then(()=> this)
-        )}
+        return this.initializeDb().then(()=>  this.initRoutes(routers).then(()=> this))
+        
+        }
 }
