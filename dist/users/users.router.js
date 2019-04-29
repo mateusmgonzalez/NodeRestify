@@ -54,6 +54,17 @@ class UsersRouter extends router_1.Router {
                 return next();
             });
         });
+        application.del('/users/:id', (req, resp, next) => {
+            users_model_1.User.remove({ _id: req.params.id }).exec().then((cmdResult) => {
+                if (cmdResult.result.n) {
+                    resp.send(204);
+                }
+                else {
+                    resp.send(404);
+                }
+                return next();
+            });
+        });
     }
 }
 exports.usersRouters = new UsersRouter();
