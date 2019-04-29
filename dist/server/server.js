@@ -5,7 +5,6 @@ const environment_1 = require("../common/environment");
 const mongoose = require("mongoose");
 class Server {
     initializeDb() {
-        ;
         mongoose.Promise = global.Promise;
         return mongoose.connect(environment_1.environment.db.url, {
             useMongoClient: true
@@ -19,6 +18,7 @@ class Server {
                     version: '1.0.0'
                 });
                 this.application.use(restify.plugins.queryParser());
+                this.application.use(restify.plugins.bodyParser());
                 //routes
                 for (let router of routers) {
                     router.applyRoutes(this.application);

@@ -7,7 +7,7 @@ export class Server {
     application: restify.Server
 
     initializeDb(): mongoose.MongooseThenable {
-        (<any>) mongoose.Promise = global.Promise
+        (<any>mongoose).Promise = global.Promise
         return mongoose.connect(environment.db.url,{
             useMongoClient: true
         })
@@ -24,6 +24,7 @@ export class Server {
 
 
                 this.application.use(restify.plugins.queryParser());
+                this.application.use(restify.plugins.bodyParser())
                 
                 //routes
                 for(let router of routers){

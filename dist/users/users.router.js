@@ -20,6 +20,14 @@ class UsersRouter extends router_1.Router {
                 resp.send(404);
             });
         });
+        application.post('/users', (req, resp, next) => {
+            let user = new users_model_1.User(req.body);
+            user.save().then(user => {
+                user.password = undefined;
+                resp.json(user);
+                return next();
+            });
+        });
     }
 }
 exports.usersRouters = new UsersRouter();
